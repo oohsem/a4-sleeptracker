@@ -1,20 +1,133 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+    <ion-title>Sleep Journal</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <main class="page-container">
+
+    <!-- Welcome section -->
+    <section class="welcome-section">
+      <p class="welcome-label">YOUR PERSONAL SLEEP TRACKER</p>
+      <h1>{{ greeting }}.</h1>
+      <p class="welcome-description">
+        Take a moment to check in with your sleep.
+      </p>
+    </section>
+
+    <!-- Latest overnight sleep -->
+    <section class="section">
+      <h2>Last night's sleep</h2>
+
+      @if (latestOvernightData; as overnight) {
+        <div class="summary-card sleep-card">
+
+          <div class="card-heading">
+            <span class="card-icon moon-icon">☾</span>
+            <span class="card-label">OVERNIGHT SLEEP</span>
+          </div>
+
+          <p class="sleep-duration">
+            {{ overnight.summaryString() }}
+          </p>
+
+          <p class="card-date">
+            {{ overnight.dateString() }}
+          </p>
+
+        </div>
+      } @else {
+        <div class="empty-card">
+          <p>No overnight sleep recorded yet.</p>
+        </div>
+      }
+    </section>
+
+    <!-- Latest sleepiness rating -->
+    <section class="section">
+      <h2>Daytime check-in</h2>
+
+      @if (latestSleepinessData; as sleepiness) {
+        <div class="summary-card sleepiness-card">
+
+          <div class="card-heading">
+            <span class="card-icon sun-icon">☀</span>
+            <span class="card-label">LATEST SLEEPINESS RATING</span>
+          </div>
+
+          <p class="sleepiness-rating">
+            {{ sleepiness.summaryString() }}
+          </p>
+
+          <p class="card-date">
+            {{ sleepiness.dateString() }}
+          </p>
+
+        </div>
+      } @else {
+        <div class="empty-card">
+          <p>No sleepiness ratings recorded yet.</p>
+        </div>
+      }
+    </section>
+
+    <!-- Recent entries -->
+    <section class="section recent-section">
+      <div class="section-heading">
+        <h2>Recent entries</h2>
+        <span class="entry-count">
+          {{ recentSleepData.length }} entries
+        </span>
+      </div>
+
+      @if (recentSleepData.length > 0) {
+
+        @for (entry of recentSleepData; track entry.id) {
+
+          <div class="recent-entry">
+
+            <div class="entry-icon"
+              [class.overnight-entry-icon]="isOvernightSleep(entry)"
+              [class.sleepiness-entry-icon]="isSleepiness(entry)">
+
+              @if (isOvernightSleep(entry)) {
+                ☾
+              } @else {
+                ☀
+              }
+
+            </div>
+
+            <div class="entry-information">
+
+              <h3>
+                @if (isOvernightSleep(entry)) {
+                  Overnight Sleep
+                } @else {
+                  Sleepiness Rating
+                }
+              </h3>
+
+              <p>{{ entry.dateString() }}</p>
+              <p class="entry-summary">{{ entry.summaryString() }}</p>
+
+            </div>
+
+          </div>
+
+        }
+
+      } @else {
+        <div class="empty-card">
+          <p>Your sleep journal is empty.</p>
+          <p>Start by recording your sleep or daytime sleepiness.</p>
+        </div>
+      }
+
+    </section>
+
+  </main>
+
 </ion-content>

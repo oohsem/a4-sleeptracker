@@ -12,16 +12,58 @@ import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
   imports: [IonHeader, IonToolbar, IonTitle, IonContent],
 })
 export class HomePage {
-  constructor(public sleepService:SleepService) {
 
-	}
+  constructor(public sleepService: SleepService) {}
 
-	ngOnInit() {
-		console.log(this.allSleepData);
-	}
+  // Get the latest overnight sleep entry.
+  get latestOvernightData(): OvernightSleepData | undefined {
+    const allOvernightData = SleepService.AllOvernightData;
 
-	/* Ionic doesn't allow bindings to static variables, so this getter can be used instead. */
-	get allSleepData() {
-		return SleepService.AllSleepData;
-	}
+    if (allOvernightData.length === 0) {
+      return undefined;
+    }
+
+    return allOvernightData[allOvernightData.length - 1];
+  }
+
+  // Get the latest sleepiness entry.
+  get latestSleepinessData(): StanfordSleepinessData | undefined {
+    const allSleepinessData = SleepService.AllSleepinessData;
+
+    if (allSleepinessData.length === 0) {
+      return undefined;
+    }
+
+    return allSleepinessData[allSleepinessData.length - 1];
+  }
+
+  // Get the five most recent entries, regardless of type.
+  get recentSleepData(): SleepData[] {
+    return [...SleepService.AllSleepData]
+      .reverse()
+      .slice(0, 5);
+  }
+
+  // Determine whether an entry is overnight sleep.
+  isOvernightSleep(entry: SleepData): boolean {
+    return entry instanceof OvernightSleepData;
+  }
+
+  // Determine whether an entry is a sleepiness rating.
+  isSleepiness(entry: SleepData): boolean {
+    return entry instanceof StanfordSleepinessData;
+  }
+
+  // Display a greeting based on the current time.
+  get greeting(): string {
+    const currentHour = new Date().getHours();
+
+    if (currentHour < 12) {
+      return 'Good morning';
+    } else if (currentHour < 18) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  }
 }
