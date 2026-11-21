@@ -1,0 +1,126 @@
+
+:host {
+  --journal-background: #f7f6f1;
+  --sage: #789582;
+  --sage-dark: #526f60;
+  --text-dark: #293b34;
+  --text-muted: #829087;
+}
+
+ion-toolbar {
+  --background: #f7f6f1;
+  --color: var(--text-dark);
+  --border-color: transparent;
+}
+
+ion-content {
+  --background: var(--journal-background);
+}
+
+.page-container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 28px 22px 40px;
+}
+
+.welcome-section {
+  margin-bottom: 30px;
+}
+
+.welcome-label {
+  color: var(--sage-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.welcome-section h1 {
+  color: var(--text-dark);
+  font-size: 28px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.welcome-section p:last-child {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 20px;
+}
+
+.form-field label {
+  display: block;
+  color: var(--text-dark);
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-field p {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 0 0 16px;
+}
+
+ion-datetime-button {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.field-divider {
+  height: 1px;
+  background: #edf0eb;
+  margin: 24px 0;
+}
+
+.duration-card {
+  background: #e8eee8;
+  border-radius: 18px;
+  padding: 25px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.duration-card p {
+  color: var(--sage-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 10px;
+}
+
+.duration-card h2 {
+  color: var(--text-dark);
+  font-size: 32px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.save-button {
+  --background: var(--sage);
+  --background-hover: var(--sage-dark);
+  --border-radius: 14px;
+  --box-shadow: none;
+  height: 52px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.error-message {
+  color: #b34b4b;
+  font-size: 13px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+@media (max-width: 400px) {
+  .page-container {
+    padding: 24px 16px 32px;
+  }
+}

@@ -1,0 +1,93 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Log Sleep</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <main class="page-container">
+
+    <section class="welcome-section">
+      <p class="welcome-label">YOUR SLEEP JOURNAL</p>
+      <h1>Record your sleep</h1>
+      <p>A little rest goes a long way.</p>
+    </section>
+
+    <!-- Sleep date and time form -->
+    <section class="form-card">
+
+      <div class="form-field">
+        <label>Bedtime</label>
+        <p>When did you go to sleep?</p>
+
+        <ion-datetime-button
+          datetime="bedtime-picker">
+        </ion-datetime-button>
+      </div>
+
+      <div class="field-divider"></div>
+
+      <div class="form-field">
+        <label>Wake-up time</label>
+        <p>When did you wake up?</p>
+
+        <ion-datetime-button
+          datetime="wake-picker">
+        </ion-datetime-button>
+      </div>
+
+    </section>
+
+    <!-- Sleep duration -->
+    <section class="duration-card">
+      <p>YOUR TOTAL SLEEP</p>
+      <h2>{{ durationString }}</h2>
+    </section>
+
+    <!-- Validation message -->
+    @if (errorMessage) {
+      <p class="error-message" role="alert">
+        {{ errorMessage }}
+      </p>
+    }
+
+    <!-- Save button -->
+    <ion-button
+      expand="block"
+      class="save-button"
+      (click)="saveSleep()">
+      Save Sleep
+    </ion-button>
+
+  </main>
+
+  <!-- Bedtime picker -->
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="bedtime-picker"
+        presentation="date-time"
+        [value]="bedtime"
+        (ionChange)="updateBedtime($event.detail.value)">
+      </ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+  <!-- Wake-up picker -->
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="wake-picker"
+        presentation="date-time"
+        [value]="wakeTime"
+        (ionChange)="updateWakeTime($event.detail.value)">
+      </ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

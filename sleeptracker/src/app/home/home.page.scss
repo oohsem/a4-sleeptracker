@@ -243,3 +243,19 @@ ion-content {
     font-size: 22px;
   }
 }
+
+.quick-actions {
+  margin-bottom: 28px;
+}
+
+.log-sleep-button {
+  --background: #789582;
+  --background-hover: #526f60;
+  --border-radius: 14px;
+  --box-shadow: none;
+
+  height: 52px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+}
