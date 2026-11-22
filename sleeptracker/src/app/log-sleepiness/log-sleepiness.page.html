@@ -1,0 +1,100 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Log Sleepiness</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <main class="page-container">
+
+    <section class="welcome-section">
+      <p class="welcome-label">DAYTIME CHECK-IN</p>
+      <h1>How sleepy are you?</h1>
+      <p>Take a moment to check in with yourself.</p>
+    </section>
+
+    <!-- Sleepiness rating -->
+    <section class="form-card">
+
+      <h2>Select your sleepiness level</h2>
+      <p class="field-description">
+        1 means fully alert, while 7 means extremely sleepy.
+      </p>
+
+      <div class="rating-options">
+
+        @for (rating of [1, 2, 3, 4, 5, 6, 7]; track rating) {
+          <button
+            type="button"
+            class="rating-button"
+            [class.selected]="selectedRating === rating"
+            [attr.aria-pressed]="selectedRating === rating"
+            [attr.aria-label]="'Sleepiness level ' + rating"
+            (click)="selectRating(rating)">
+            {{ rating }}
+          </button>
+        }
+
+      </div>
+
+      <div class="rating-description">
+        <p class="rating-label">
+          LEVEL {{ selectedRating }} OF 7
+        </p>
+
+        <p class="rating-text">
+          {{ scaleValues[selectedRating] }}
+        </p>
+      </div>
+
+      <div class="field-divider"></div>
+
+      <!-- Date and time -->
+      <div class="form-field">
+        <h2>Date &amp; time</h2>
+        <p class="field-description">
+          When did you feel this way?
+        </p>
+
+        <ion-datetime-button
+          datetime="sleepiness-picker">
+        </ion-datetime-button>
+      </div>
+
+    </section>
+
+    <!-- Validation -->
+    @if (errorMessage) {
+      <p class="error-message" role="alert">
+        {{ errorMessage }}
+      </p>
+    }
+
+    <!-- Save -->
+    <ion-button
+      expand="block"
+      class="save-button"
+      (click)="saveSleepiness()">
+      Save Sleepiness Rating
+    </ion-button>
+
+  </main>
+
+  <!-- Date/time picker -->
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="sleepiness-picker"
+        presentation="date-time"
+        [value]="loggedAt"
+        (ionChange)="updateLoggedAt($event.detail.value)">
+      </ion-datetime>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

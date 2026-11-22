@@ -259,3 +259,17 @@ ion-content {
   font-weight: 600;
   text-transform: none;
 }
+
+.log-sleepiness-button {
+  --background: #a99abb;
+  --background-hover: #817092;
+  --border-radius: 14px;
+  --box-shadow: none;
+
+  height: 52px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+
+  margin-top: 12px;
+}

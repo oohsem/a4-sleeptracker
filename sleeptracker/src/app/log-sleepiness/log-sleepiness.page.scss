@@ -1,0 +1,169 @@
+
+:host {
+  --journal-background: #f7f6f1;
+  --sage: #789582;
+  --sage-dark: #526f60;
+  --text-dark: #293b34;
+  --text-muted: #829087;
+}
+
+ion-toolbar {
+  --background: #f7f6f1;
+  --color: var(--text-dark);
+  --border-color: transparent;
+}
+
+ion-content {
+  --background: var(--journal-background);
+}
+
+.page-container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 28px 22px 40px;
+}
+
+.welcome-section {
+  margin-bottom: 30px;
+}
+
+.welcome-label {
+  color: var(--sage-dark);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.welcome-section h1 {
+  color: var(--text-dark);
+  font-size: 28px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+
+.welcome-section p:last-child {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.form-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 24px;
+}
+
+.form-card h2 {
+  color: var(--text-dark);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px;
+}
+
+.field-description {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 18px;
+}
+
+/* Rating buttons */
+
+.rating-options {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.rating-button {
+  min-width: 0;
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: #f0f1ed;
+  color: var(--sage-dark);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.rating-button.selected {
+  background: var(--sage);
+  color: #ffffff;
+}
+
+.rating-button:focus-visible {
+  outline: 2px solid var(--sage-dark);
+  outline-offset: 3px;
+}
+
+/* Selected rating description */
+
+.rating-description {
+  background: #eeeaf2;
+  border-radius: 14px;
+  padding: 18px;
+  min-height: 105px;
+}
+
+.rating-label {
+  color: #817092;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 10px;
+}
+
+.rating-text {
+  color: var(--text-dark);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.field-divider {
+  height: 1px;
+  background: #edf0eb;
+  margin: 26px 0;
+}
+
+ion-datetime-button {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* Save button */
+
+.save-button {
+  --background: var(--sage);
+  --background-hover: var(--sage-dark);
+  --border-radius: 14px;
+  --box-shadow: none;
+
+  height: 52px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.error-message {
+  color: #b34b4b;
+  font-size: 13px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 400px) {
+  .page-container {
+    padding: 24px 16px 32px;
+  }
+
+  .form-card {
+    padding: 16px;
+  }
+
+  .rating-button {
+    height: 40px;
+  }
+}
