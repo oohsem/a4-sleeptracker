@@ -273,3 +273,19 @@ ion-content {
 
   margin-top: 12px;
 }
+
+.history-action {
+  margin-bottom: 28px;
+}
+
+.history-button {
+  --color: #526f60;
+  --border-color: #789582;
+  --border-radius: 14px;
+  --box-shadow: none;
+
+  height: 48px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: none;
+}

@@ -1,0 +1,114 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Sleep History</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <main class="page-container">
+
+    <section class="welcome-section">
+      <p class="welcome-label">YOUR SLEEP JOURNAL</p>
+      <h1>Your sleep history</h1>
+      <p>A little reflection goes a long way.</p>
+    </section>
+
+    <!-- Filter -->
+    <section class="filter-section">
+
+      <ion-segment
+        [value]="selectedFilter"
+        (ionChange)="changeFilter($event.detail.value)">
+
+        <ion-segment-button value="all">
+          <ion-label>All</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button value="overnight">
+          <ion-label>Overnight</ion-label>
+        </ion-segment-button>
+
+        <ion-segment-button value="sleepiness">
+          <ion-label>Sleepiness</ion-label>
+        </ion-segment-button>
+
+      </ion-segment>
+
+    </section>
+
+    <!-- History records -->
+    <section class="history-section">
+
+      <div class="section-heading">
+        <h2>Past entries</h2>
+        <span>{{ filteredSleepData.length }} entries</span>
+      </div>
+
+      @if (filteredSleepData.length > 0) {
+
+        @for (entry of filteredSleepData; track entry.id) {
+
+          <div class="history-card">
+
+            <div class="entry-heading">
+
+              <div
+                class="entry-icon"
+                [class.overnight-icon]="isOvernightSleep(entry)"
+                [class.sleepiness-icon]="isSleepiness(entry)">
+                @if (isOvernightSleep(entry)) {
+                  ☾
+                } @else {
+                  ☀
+                }
+              </div>
+
+              <div class="entry-title">
+                <h3>
+                  @if (isOvernightSleep(entry)) {
+                    Overnight Sleep
+                  } @else {
+                    Sleepiness Rating
+                  }
+                </h3>
+
+                <p>{{ formatDate(entry.loggedAt) }}</p>
+              </div>
+
+            </div>
+
+            <p class="entry-summary">
+              {{ entry.summaryString() }}
+            </p>
+
+            @if (isOvernightSleep(entry)) {
+              <p class="entry-details">
+                {{ getBedtime(entry) }} – {{ getWakeTime(entry) }}
+              </p>
+            } @else {
+              <p class="entry-details">
+                Logged at {{ formatTime(entry.loggedAt) }}
+              </p>
+            }
+
+          </div>
+
+        }
+
+      } @else {
+        <div class="empty-card">
+          <p>No entries found.</p>
+          <p>Your sleep records will appear here once you start logging.</p>
+        </div>
+      }
+
+    </section>
+
+  </main>
+
+</ion-content>

@@ -24,4 +24,12 @@ export class OvernightSleepData extends SleepData {
 	override dateString():string {
 		return "Night of " + this.sleepStart.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 	}
+
+	get sleepStartTime(): Date {
+    return this.sleepStart;
+}
+
+	get sleepEndTime(): Date {
+		return this.sleepEnd;
+	}
 }
