@@ -66,28 +66,36 @@
 
   </main>
 
-  <!-- Bedtime picker -->
+
+  <!-- Bedtime Date and Time Picker -->
   <ion-modal [keepContentsMounted]="true">
     <ng-template>
       <ion-datetime
         id="bedtime-picker"
         presentation="date-time"
         [value]="bedtime"
+        [showDefaultButtons]="true"
+        doneText="Confirm"
+        cancelText="Cancel"
         (ionChange)="updateBedtime($event.detail.value)">
       </ion-datetime>
     </ng-template>
   </ion-modal>
 
-  <!-- Wake-up picker -->
+  <!-- Wake-Up Date and Time Picker -->
   <ion-modal [keepContentsMounted]="true">
     <ng-template>
       <ion-datetime
         id="wake-picker"
         presentation="date-time"
         [value]="wakeTime"
+        [showDefaultButtons]="true"
+        doneText="Confirm"
+        cancelText="Cancel"
         (ionChange)="updateWakeTime($event.detail.value)">
       </ion-datetime>
     </ng-template>
   </ion-modal>
+
 
 </ion-content>

@@ -103,7 +103,9 @@ export class LogSleepinessPage {
       await this.sleepService.logSleepinessData(sleepinessData);
 
       this.errorMessage = '';
-      await this.router.navigateByUrl('/home');
+      await this.router.navigate(['/home'], {
+        state: { successMessage: 'Sleepiness rating saved successfully!' }
+      });
 
     } catch (error) {
       this.errorMessage = 'Unable to save sleepiness. Please try again.';

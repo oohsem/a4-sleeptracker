@@ -109,15 +109,45 @@ export class SleepService {
   }
 
   // Add and save a sleepiness record.
-  public async logSleepinessData(
-    sleepData: StanfordSleepinessData
-  ): Promise<void> {
+	public async logSleepinessData(
+		sleepData: StanfordSleepinessData
+	): Promise<void> {
 
-    await this.ready();
+		await this.ready();
 
-    SleepService.AllSleepinessData.push(sleepData);
-    SleepService.AllSleepData.push(sleepData);
+		SleepService.AllSleepinessData.push(sleepData);
+		SleepService.AllSleepData.push(sleepData);
 
-    await this.saveSleepData();
-  }
+		await this.saveSleepData();
+	}
+
+
+	public async deleteSleepData(id: string): Promise<void> {
+	await this.ready();
+
+	// Save the original arrays in case storage fails.
+	const previousAll = SleepService.AllSleepData;
+	const previousOvernight = SleepService.AllOvernightData;
+	const previousSleepiness = SleepService.AllSleepinessData;
+
+	SleepService.AllSleepData =
+		SleepService.AllSleepData.filter(entry => entry.id !== id);
+
+	SleepService.AllOvernightData =
+		SleepService.AllOvernightData.filter(entry => entry.id !== id);
+
+	SleepService.AllSleepinessData =
+		SleepService.AllSleepinessData.filter(entry => entry.id !== id);
+
+	try {
+		await this.saveSleepData();
+	} catch (error) {
+		// Restore the entries if saving fails.
+		SleepService.AllSleepData = previousAll;
+		SleepService.AllOvernightData = previousOvernight;
+		SleepService.AllSleepinessData = previousSleepiness;
+		throw error;
+	}
+	}
+
 }

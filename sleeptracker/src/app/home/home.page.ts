@@ -6,45 +6,46 @@ import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
 import { RouterLink } from "@angular/router";
 import { IonButton } from '@ionic/angular/standalone';
+import { IonToast } from '@ionic/angular/standalone';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, RouterLink, IonButton],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, RouterLink, IonButton, IonToast],
 })
 export class HomePage {
 
-  constructor(public sleepService: SleepService) {}
+  constructor(
+    public sleepService: SleepService,
+    private router: Router
+  ) {}
 
   // Get the latest overnight sleep entry.
+
   get latestOvernightData(): OvernightSleepData | undefined {
-    const allOvernightData = SleepService.AllOvernightData;
-
-    if (allOvernightData.length === 0) {
-      return undefined;
-    }
-
-    return allOvernightData[allOvernightData.length - 1];
+    return [...SleepService.AllOvernightData]
+      .sort((a, b) =>
+        b.loggedAt.getTime() - a.loggedAt.getTime()
+      )[0];
   }
 
-  // Get the latest sleepiness entry.
   get latestSleepinessData(): StanfordSleepinessData | undefined {
-    const allSleepinessData = SleepService.AllSleepinessData;
-
-    if (allSleepinessData.length === 0) {
-      return undefined;
-    }
-
-    return allSleepinessData[allSleepinessData.length - 1];
+    return [...SleepService.AllSleepinessData]
+      .sort((a, b) =>
+        b.loggedAt.getTime() - a.loggedAt.getTime()
+      )[0];
   }
 
-  // Get the five most recent entries, regardless of type.
   get recentSleepData(): SleepData[] {
     return [...SleepService.AllSleepData]
-      .reverse()
+      .sort((a, b) =>
+        b.loggedAt.getTime() - a.loggedAt.getTime()
+      )
       .slice(0, 5);
   }
+
 
   // Determine whether an entry is overnight sleep.
   isOvernightSleep(entry: SleepData): boolean {
@@ -80,4 +81,27 @@ export class HomePage {
       this.isLoading = false;
     }
   }
+
+  toastOpen: boolean = false;
+  toastMessage: string = '';
+
+  showToast(message: string) {
+    this.toastMessage = message;
+    this.toastOpen = true;
+  }
+
+  ionViewWillEnter() {
+  const message = history.state?.successMessage;
+
+  if (typeof message === 'string') {
+    this.showToast(message);
+
+    // Prevent the message from appearing again after refresh.
+    window.history.replaceState(
+      {},
+      '',
+      this.router.url
+    );
+  }
+}
 }

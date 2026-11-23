@@ -154,15 +154,29 @@
         }
 
       } @else {
-        <div class="empty-card">
-          <p>Your sleep journal is empty.</p>
-          <p>Start by recording your sleep or daytime sleepiness.</p>
-        </div>
+          <div class="empty-card">
+            <h3>Your journal starts here</h3>
+            <p>
+              Record your first night of sleep or check in with
+              how sleepy you're feeling.
+            </p>
+            <p>
+              Your entries will appear here as you build your sleep journal.
+            </p>
+          </div>
       }
 
     </section>
 
   </main>
   }
+
+  <ion-toast
+    [isOpen]="toastOpen"
+    [message]="toastMessage"
+    [duration]="2500"
+    position="bottom"
+    (didDismiss)="toastOpen = false">
+  </ion-toast>
 
 </ion-content>

@@ -1,17 +1,6 @@
-
 import { Component } from '@angular/core';
 
-import {
-  IonHeader,
-  IonToolbar,
-  IonTitle,
-  IonContent,
-  IonButtons,
-  IonBackButton,
-  IonSegment,
-  IonSegmentButton,
-  IonLabel
-} from '@ionic/angular/standalone';
+import {IonHeader,IonToolbar,IonTitle,IonContent,IonButtons,IonBackButton,IonSegment,IonSegmentButton,IonLabel, IonButton, AlertController, ToastController} from '@ionic/angular/standalone';
 
 import { SleepService } from '../services/sleep.service';
 import { SleepData } from '../data/sleep-data';
@@ -31,14 +20,15 @@ import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
     IonBackButton,
     IonSegment,
     IonSegmentButton,
-    IonLabel
+    IonLabel, 
+    IonButton,
   ]
 })
 export class HistoryPage {
 
   selectedFilter: string = 'all';
 
-  constructor(public sleepService: SleepService) {}
+  constructor(public sleepService: SleepService, private alertController: AlertController, private toastController: ToastController) {}
 
   // Return entries based on the selected filter.
   get filteredSleepData(): SleepData[] {
@@ -119,4 +109,53 @@ export class HistoryPage {
       this.isLoading = false;
     }
   }
+
+
+async confirmDelete(entry: SleepData) {
+  const alert = await this.alertController.create({
+    header: 'Delete entry?',
+    message: 'This sleep record will be permanently removed.',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      },
+      {
+        text: 'Delete',
+        role: 'destructive',
+        handler: () => {
+          void this.deleteEntry(entry.id);
+        }
+      }
+    ]
+  });
+
+  await alert.present();
+}
+
+async deleteEntry(id: string) {
+  try {
+    await this.sleepService.deleteSleepData(id);
+
+    const toast = await this.toastController.create({
+      message: 'Sleep entry deleted.',
+      duration: 2000,
+      position: 'bottom'
+    });
+
+    await toast.present();
+
+  } catch (error) {
+    console.error('Error deleting sleep entry:', error);
+
+    const alert = await this.alertController.create({
+      header: 'Unable to delete',
+      message: 'Please try again.',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+}
+
 }

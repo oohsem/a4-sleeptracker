@@ -92,7 +92,10 @@
         id="sleepiness-picker"
         presentation="date-time"
         [value]="loggedAt"
-        (ionChange)="updateLoggedAt($event.detail.value)">
+        (ionChange)="updateLoggedAt($event.detail.value)"
+        [showDefaultButtons]="true"
+        doneText="Confirm"
+        cancelText="Cancel">
       </ion-datetime>
     </ng-template>
   </ion-modal>

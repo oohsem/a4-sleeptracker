@@ -142,7 +142,9 @@ export class LogSleepPage {
       await this.sleepService.logOvernightData(sleepData);
 
       this.errorMessage = '';
-      await this.router.navigateByUrl('/home');
+      await this.router.navigate(['/home'], {
+       state: { successMessage: 'Overnight sleep saved successfully!' }
+      });
 
     } catch (error) {
       this.errorMessage = 'Unable to save sleep. Please try again.';
