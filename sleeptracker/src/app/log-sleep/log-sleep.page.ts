@@ -1,4 +1,3 @@
-
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -109,7 +108,7 @@ export class LogSleepPage {
   }
 
   // Save the overnight sleep record.
-  saveSleep() {
+  async saveSleep() {
     const start = new Date(this.bedtime);
     const end = new Date(this.wakeTime);
 
@@ -139,11 +138,15 @@ export class LogSleepPage {
 
     const sleepData = new OvernightSleepData(start, end);
 
-    this.sleepService.logOvernightData(sleepData);
+    try {
+      await this.sleepService.logOvernightData(sleepData);
 
-    this.errorMessage = '';
+      this.errorMessage = '';
+      await this.router.navigateByUrl('/home');
 
-    // Return to the dashboard after saving.
-    this.router.navigateByUrl('/home');
+    } catch (error) {
+      this.errorMessage = 'Unable to save sleep. Please try again.';
+      console.error('Error saving overnight sleep:', error);
+    }
   }
 }

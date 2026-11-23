@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage-angular';
 import { SleepData } from '../data/sleep-data';
 import { OvernightSleepData } from '../data/overnight-sleep-data';
 import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
@@ -7,44 +8,116 @@ import { StanfordSleepinessData } from '../data/stanford-sleepiness-data';
   providedIn: 'root'
 })
 export class SleepService {
-	private static LoadDefaultData:boolean = true;
-	public static AllSleepData:SleepData[] = [];
-	public static AllOvernightData:OvernightSleepData[] = [];
-	public static AllSleepinessData:StanfordSleepinessData[] = [];
+  public static AllSleepData: SleepData[] = [];
+  public static AllOvernightData: OvernightSleepData[] = [];
+  public static AllSleepinessData: StanfordSleepinessData[] = [];
 
-	constructor() {
-		if(SleepService.LoadDefaultData) {
-			this.addDefaultData();
-		SleepService.LoadDefaultData = false;
-	}
-	}
+  private storage: Storage;
+  private storageReady: Promise<void>;
 
-	private addDefaultData() {
-		var goToBed = new Date();
-		goToBed.setDate(goToBed.getDate() - 1); //set to yesterday
-		goToBed.setHours(1, 3, 0); //1:03am
-		var wakeUp = new Date();
-		wakeUp.setTime(goToBed.getTime() + 8 * 60 * 60 * 1000); //Sleep for exactly eight hours, waking up at 9:03am
-		this.logOvernightData(new OvernightSleepData(goToBed, wakeUp)); // add that person was asleep 1am-9am yesterday
-		var sleepinessDate = new Date();
-		sleepinessDate.setDate(sleepinessDate.getDate() - 1); //set to yesterday
-		sleepinessDate.setHours(14, 38, 0); //2:38pm
-		this.logSleepinessData(new StanfordSleepinessData(4, sleepinessDate)); // add sleepiness at 2pm
-		goToBed = new Date();
-		goToBed.setDate(goToBed.getDate() - 1); //set to yesterday
-		goToBed.setHours(23, 11, 0); //11:11pm
-		wakeUp = new Date();
-		wakeUp.setTime(goToBed.getTime() + 9 * 60 * 60 * 1000); //Sleep for exactly nine hours
-		this.logOvernightData(new OvernightSleepData(goToBed, wakeUp));
-	}
+  constructor() {
+    this.storage = new Storage();
+    this.storageReady = this.initializeStorage();
+  }
 
-	public logOvernightData(sleepData:OvernightSleepData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllOvernightData.push(sleepData);
-	}
+  // Initialize storage and load previously saved records.
+  private async initializeStorage(): Promise<void> {
+    await this.storage.create();
+    await this.loadSleepData();
+  }
 
-	public logSleepinessData(sleepData:StanfordSleepinessData) {
-		SleepService.AllSleepData.push(sleepData);
-		SleepService.AllSleepinessData.push(sleepData);
-	}
+  // Allow other pages to wait until stored records are loaded.
+  public async ready(): Promise<void> {
+    await this.storageReady;
+  }
+
+  // Load records from local storage.
+  private async loadSleepData(): Promise<void> {
+
+    const savedOvernight = await this.storage.get('overnightData');
+    const savedSleepiness = await this.storage.get('sleepinessData');
+
+    SleepService.AllOvernightData = [];
+    SleepService.AllSleepinessData = [];
+
+    if (Array.isArray(savedOvernight)) {
+      for (const entry of savedOvernight) {
+
+        const sleepData = new OvernightSleepData(
+          new Date(entry.sleepStart),
+          new Date(entry.sleepEnd)
+        );
+
+        sleepData.id = entry.id;
+        sleepData.loggedAt = new Date(entry.loggedAt);
+
+        SleepService.AllOvernightData.push(sleepData);
+      }
+    }
+
+    if (Array.isArray(savedSleepiness)) {
+      for (const entry of savedSleepiness) {
+
+        const sleepData = new StanfordSleepinessData(
+          entry.loggedValue,
+          new Date(entry.loggedAt)
+        );
+
+        sleepData.id = entry.id;
+
+        SleepService.AllSleepinessData.push(sleepData);
+      }
+    }
+
+    SleepService.AllSleepData = [
+      ...SleepService.AllOvernightData,
+      ...SleepService.AllSleepinessData
+    ];
+  }
+
+  // Save all records to local storage.
+  private async saveSleepData(): Promise<void> {
+
+    const overnightData = SleepService.AllOvernightData.map(entry => ({
+      id: entry.id,
+      loggedAt: entry.loggedAt.toISOString(),
+      sleepStart: entry.sleepStartTime.toISOString(),
+      sleepEnd: entry.sleepEndTime.toISOString()
+    }));
+
+    const sleepinessData = SleepService.AllSleepinessData.map(entry => ({
+      id: entry.id,
+      loggedAt: entry.loggedAt.toISOString(),
+      loggedValue: entry.sleepinessValue
+    }));
+
+    await this.storage.set('overnightData', overnightData);
+    await this.storage.set('sleepinessData', sleepinessData);
+  }
+
+  // Add and save an overnight sleep record.
+  public async logOvernightData(
+    sleepData: OvernightSleepData
+  ): Promise<void> {
+
+    await this.ready();
+
+    SleepService.AllOvernightData.push(sleepData);
+    SleepService.AllSleepData.push(sleepData);
+
+    await this.saveSleepData();
+  }
+
+  // Add and save a sleepiness record.
+  public async logSleepinessData(
+    sleepData: StanfordSleepinessData
+  ): Promise<void> {
+
+    await this.ready();
+
+    SleepService.AllSleepinessData.push(sleepData);
+    SleepService.AllSleepData.push(sleepData);
+
+    await this.saveSleepData();
+  }
 }

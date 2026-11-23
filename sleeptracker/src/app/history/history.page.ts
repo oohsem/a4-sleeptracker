@@ -107,4 +107,16 @@ export class HistoryPage {
 
     return '';
   }
+
+  isLoading: boolean = true;
+
+  async ngOnInit() {
+    try {
+      await this.sleepService.ready();
+    } catch (error) {
+      console.error('Unable to load sleep history:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }

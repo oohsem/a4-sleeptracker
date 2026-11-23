@@ -68,4 +68,16 @@ export class HomePage {
       return 'Good evening';
     }
   }
+
+  isLoading: boolean = true;
+
+  async ngOnInit() {
+    try {
+      await this.sleepService.ready();
+    } catch (error) {
+      console.error('Unable to load sleep records:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }

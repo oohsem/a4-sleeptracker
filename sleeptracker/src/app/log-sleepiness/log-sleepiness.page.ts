@@ -76,7 +76,7 @@ export class LogSleepinessPage {
   }
 
   // Save the sleepiness entry.
-  saveSleepiness() {
+  async saveSleepiness() {
     const date = new Date(this.loggedAt);
 
     if (!Number.isFinite(date.getTime())) {
@@ -99,11 +99,15 @@ export class LogSleepinessPage {
       date
     );
 
-    this.sleepService.logSleepinessData(sleepinessData);
+    try {
+      await this.sleepService.logSleepinessData(sleepinessData);
 
-    this.errorMessage = '';
+      this.errorMessage = '';
+      await this.router.navigateByUrl('/home');
 
-    // Return to the dashboard.
-    this.router.navigateByUrl('/home');
-  }
+    } catch (error) {
+      this.errorMessage = 'Unable to save sleepiness. Please try again.';
+      console.error('Error saving sleepiness:', error);
+    }
+}
 }

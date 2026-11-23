@@ -6,6 +6,12 @@
 
 <ion-content [fullscreen]="true">
 
+  @if (isLoading) {
+  <div class="loading-message">
+    Loading your sleep journal...
+  </div>
+    } @else {
+
   <main class="page-container">
 
     <!-- Welcome section -->
@@ -157,5 +163,6 @@
     </section>
 
   </main>
+  }
 
 </ion-content>

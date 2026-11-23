@@ -10,6 +10,12 @@
 
 <ion-content [fullscreen]="true">
 
+  @if (isLoading) {
+  <div class="loading-message">
+    Loading your sleep history...
+  </div>
+  } @else {
+
   <main class="page-container">
 
     <section class="welcome-section">
@@ -111,4 +117,5 @@
 
   </main>
 
+  }
 </ion-content>
